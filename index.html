@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // 取得裝置資訊
+        function getMobileDevice() {
+            if (/android/i.test(navigator.userAgent)) {
+                return "android";
+            }
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) && !window.MSStream) {
+                return "ios";
+            }
+            return '';
+        }
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        function redirectUrl() {
+            var context = '場所代碼：' + getUrlParameter("text") + ' 本簡訊為實聯登記，限防疫目的使用。';
+            var os = getMobileDevice();
+            if (os == "android") {
+                location.href = "sms:1922?body=" + context;
+            }
+            else if (os == "ios") {
+                location.href = "sms:1922&body=" + context;
+            } else {
+                console.log('device unknown');
+            }
+        }
+        
+    </script>
+</head>
+
+<body onload="redirectUrl()">
+    <div style="text-align: center;margin-top: 200px;line-height: 21px;font-weight: 400;">
+        <img src="./closeSelf.svg" width="170" height="140">
+        <div style="margin-top: 10px;font-size: 14px;color: #333333;">簡訊實聯登記</div>
+        <div style="font-size: 13px;color: #666666;">你可以關閉頁面並回到 LINE</div>
+    </div>
+</body>
+</html>
